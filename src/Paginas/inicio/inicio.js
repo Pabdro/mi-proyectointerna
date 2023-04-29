@@ -8,7 +8,7 @@ const Inicio = () => {
         <br/><br/><br/>
         <h1 className='titulo'>Aplicacion interna</h1>
         <div className='cajabotones'>
-        <Link to = "/signin">
+        <Link to = "/crearLatex">
         <button  type="button" class="boton"><b>Crear latex</b>
         </button>
         </Link>
