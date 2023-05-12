@@ -1,0 +1,47 @@
+.CrearLatex{
+    font-family: 'Roboto', sans-serif;
+    margin: auto;
+    display: block;
+    background-image: url(../inicio/fondo.png);
+    background-size: cover;
+    background-position: center center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+}
+.toggle-button {
+    background-color: #e0e0e0;
+    color: #333;
+    border: none;
+    padding: 10px 20px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+  }
+  
+  .toggle-button.active {
+    background-color: #545454;
+    color: #fff;
+  }
+  .button-bar {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 50px;
+    background-color: #a6a6a6;
+  }
+  .button-bar button:first-child {
+    margin-top: 0px; /* separación vertical */
+    margin-right: 20px; /* separación horizontal */
+  }
+  
+  .button-bar button:last-child {
+    margin-top: 0px; /* separación vertical */
+    margin-left: 20px; /* separación horizontal */
+  }
+  
+  
+  
+  
+  
+  
+  
