@@ -4,7 +4,7 @@ import Inicio from '../src/Paginas/inicio/inicio'
 import CrearLatex from '../src/Paginas/crearLatex/crearLatex'
 function App() {
   return (
-    <div classname='App'>
+    <div className='App'>
     <Routes>
       <Route path='/' element={<Inicio/>} />
       <Route path='/crearLatex' element={<CrearLatex/>} />

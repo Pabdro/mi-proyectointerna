@@ -9,7 +9,7 @@ const Inicio = () => {
         <h1 className='titulo'>Aplicacion interna</h1>
         <div className='cajabotones'>
         <Link to = "/crearLatex">
-        <button  type="button" class="boton"><b>Crear latex</b>
+        <button  type="button" className="boton"><b>Crear latex</b>
         </button>
         </Link>
         </div>
