@@ -1,7 +1,7 @@
 import React from 'react'
 import './crearLatex.css';
 import { useState } from 'react';
-// import useAxios from 'axios-hooks'
+import { Document, Page } from 'react-pdf';
 import axios from 'axios';
 const CrearLatex = () => {
   const [loading, setLoading] = useState(false);
@@ -14,7 +14,7 @@ const CrearLatex = () => {
       const response = await axios.post('http://localhost:3500/exercises/sentLatex', {
         ids: exercises.map(exercise => exercise._id)
       }, {
-        responseType: 'blob' // Indicar que se espera una respuesta de tipo blob
+        responseType: 'blob'
       });
       const fileUrl = window.URL.createObjectURL(new Blob([response.data]));
       const link = document.createElement('a');
@@ -30,38 +30,29 @@ const CrearLatex = () => {
       setLoading(false);
     }
   };
-    // const [{data}, refetch] = useAxios(
-    //     {
-    //         url: 'http://localhost:3500/exercises/',
-    //         method: 'GET',
-    //         headers: {
-    //             "Content-Type": 'application/json'
-    //         }
-    //     },
-    //     {
-    //         manual: true
-    //     }
-    // );
     const [exercises, setExercises] = useState([]);
 
   const loadExercises = () => {
     fetch('http://localhost:3500/exercises/')
       .then(response => response.json())
       .then(data => {
-        const dataLength = data.exercises.length
-        const randomIndex = Math.floor(Math.random() * dataLength)
-        setExercises(data.exercises.slice(randomIndex, randomIndex + value));
+        if (value <= data.exercises.length){        
+        const selectedExercises = [];
+        while (selectedExercises.length < value) {
+          const randomNumber = data.exercises[Math.floor(Math.random() * data.exercises.length)];
+          if (!selectedExercises.includes(randomNumber)) {
+            selectedExercises.push(randomNumber);
+          }
+        }
+        setExercises(selectedExercises);
+      } else {
+        alert("No hay mas ejercicios, por favor elegir un nuemro mas bajo");
+      }
       })
       .catch(error => {
         console.error('Error al cargar los ejercicios:', error);
       });
   };
-    // const prueba = async () => {
-    //     await refetch({
-    //       ids: 
-    //     })
-    //     console.log(data)
-    // }
     const [active, setActive] = useState(false);
     const handleClick = () => {
     setActive(!active);
@@ -81,6 +72,12 @@ const CrearLatex = () => {
     const handleAdd = () => {
         setValue(value + 1);
     };
+    const [numPages, setNumPages] = useState(null);
+  const [pageNumber, setPageNumber] = useState(1);
+
+  function onDocumentLoadSuccess({ numPages }) {
+    setNumPages(numPages);
+  }
     return (
     <div className="CrearLatex">
         <div className="button-bar">
@@ -93,7 +90,12 @@ const CrearLatex = () => {
               <p key={exercise._id}>{exercise.problem}</p>
             ))}
         </div>
-            <div className="box"></div>
+            <div className="box"><Document file='' onLoadSuccess={onDocumentLoadSuccess}>
+        <Page pageNumber={pageNumber} />
+      </Document>
+      <p>
+        Page {pageNumber} of {numPages}
+      </p></div>
         </div>
         <div className="contenedormaster">
         <button className="boton-izquierdo">Crear pdf</button>
