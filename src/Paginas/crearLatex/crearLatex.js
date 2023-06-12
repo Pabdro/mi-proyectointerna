@@ -3,6 +3,7 @@ import './crearLatex.css';
 import { useState } from 'react';
 import { Document, Page } from 'react-pdf';
 import axios from 'axios';
+import pdf from '../crearLatex/exercices.pdf'
 const CrearLatex = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
@@ -46,7 +47,7 @@ const CrearLatex = () => {
         }
         setExercises(selectedExercises);
       } else {
-        alert("No hay mas ejercicios, por favor elegir un nuemro mas bajo");
+        alert("No hay mas ejercicios, por favor elegir un número mas bajo");
       }
       })
       .catch(error => {
@@ -72,12 +73,62 @@ const CrearLatex = () => {
     const handleAdd = () => {
         setValue(value + 1);
     };
-    const [numPages, setNumPages] = useState(null);
+
+  const [numPages, setNumPages] = useState(null);
   const [pageNumber, setPageNumber] = useState(1);
 
   function onDocumentLoadSuccess({ numPages }) {
     setNumPages(numPages);
   }
+
+  const [pdfLoading, setPdfLoading] = useState(false);
+  const [pdfAvailable, setPdfAvailable] = useState(false);
+  const handleCreatePdf = async () => {
+    try {
+      setPdfLoading(true);
+      await axios.post('http://localhost:3500/exercises/createPdf', {
+        ids: ['645ab10d6864befe48a224a8'], // Ejemplo de arreglo de IDs
+      });
+      setPdfAvailable(true);
+      setPdfLoading(false);
+    } catch (error) {
+      console.log(error);
+      setPdfLoading(false);
+    }
+  };
+  
+  const handleDownloadPdf = async () => {
+    try {
+      setPdfLoading(true);
+      const response = await axios.get('http://localhost:3500/exercises/downloadPdf', {
+        responseType: 'arraybuffer', // Establece el tipo de respuesta como un arraybuffer
+      });
+      setPdfLoading(false);
+  
+      // Crea un Blob con los datos recibidos del backend
+      const pdfBlob = new Blob([response.data], { type: 'application/pdf' });
+  
+      // Crea una URL del objeto Blob para descargar el PDF
+      const pdfUrl = URL.createObjectURL(pdfBlob);
+  
+      // Crea un enlace temporal y haz clic en él para descargar el PDF
+      const link = document.createElement('a');
+      link.href = pdfUrl;
+      link.download = 'ejercicios.pdf';
+      link.click();
+    } catch (error) {
+      console.log(error);
+      setPdfLoading(false);
+    }
+  };
+  const handleButtonClick = () => {
+    loadExercises();
+    handleCreatePdf();
+  };
+
+  const [pdfURL, setPdfURL] = useState(pdf);
+
+
     return (
     <div className="CrearLatex">
         <div className="button-bar">
@@ -90,18 +141,27 @@ const CrearLatex = () => {
               <p key={exercise._id}>{exercise.problem}</p>
             ))}
         </div>
-            <div className="box"><Document file='' onLoadSuccess={onDocumentLoadSuccess}>
-        <Page pageNumber={pageNumber} />
-      </Document>
-      <p>
-        Page {pageNumber} of {numPages}
-      </p></div>
+        <div className="box">
+        {/* <h1>Welcome to Geeks for Geeks</h1>
+                <h3>Click on below link to open
+                    PDF file in new tab</h3>
+                <a href={pdf} target="_blank"
+                    rel="noreferrer">
+                    Open First PDF
+                </a> */}
+        </div>
         </div>
         <div className="contenedormaster">
-        <button className="boton-izquierdo">Crear pdf</button>
-        <button onClick={handleCreateLatex} className="boton-izquierdo2">Crear latex</button>
+        {pdfLoading ? (
+          <p>Cargando PDF...</p>
+        ) : (
+          <button className="boton-izquierdo" onClick={handleDownloadPdf} disabled={!pdfAvailable}>
+            Descargar PDF
+          </button>
+        )}
+        <button onClick={handleCreateLatex} className="boton-izquierdo2">Descargar latex</button>
         <button onClick={handleSubtract} className='botonegativo'>-</button>
-        <button onClick={loadExercises} className="boton-derecho">aleatorio: {value}</button>
+        <button onClick={handleButtonClick} className="boton-derecho">aleatorio: {value}</button>
         <button onClick={handleAdd} className='botonpositivo'>+</button>
         </div>
         {loading && <p>Cargando...</p>}
