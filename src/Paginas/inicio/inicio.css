@@ -2,7 +2,7 @@
     font-family: 'Roboto', sans-serif;
     margin: auto;
     display: block;
-    background-image: url(fondo.png);
+    background-image: url(../../assets/fondo.png);
     background-size: cover;
     background-position: center center;
     background-repeat: no-repeat;

@@ -2,7 +2,7 @@
     font-family: 'Roboto', sans-serif;
     margin: auto;
     display: block;
-    background-image: url(../inicio/fondo.png);
+    background-image: url(../../assets/fondo.png);
     background-size: cover;
     background-position: center center;
     background-repeat: no-repeat;
@@ -18,6 +18,11 @@
     cursor: pointer;
     border-radius:10px;
 }
+.ver-pdf-icon {
+  width: 50px;
+  height: 50px;
+}
+
 .toggle-button.active {
     background-color: #545454;
     color: #fff;
@@ -58,9 +63,14 @@
 
 .box {
   width: 700px;
-  height: 900px;
+  height: 650px;
   background-color: white;
   border: 1px solid black;
+  margin: 10px;
+}
+.box2 {
+  width: 700px;
+  height: 650px;
   margin: 10px;
 }
 .button-container {
